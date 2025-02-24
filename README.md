@@ -22,7 +22,21 @@ pip install -r requirements.txt
 
 ## Data Preparation
 
-Due to confidentiality, we cannot provide the dataset used in our paper. However, you can prepare your data using the following structure. Store the prepared files in `data/{data_name}/` as specified:
+### Data Availability
+Due to confidentiality, we cannot provide the dataset used in our paper. However, you can prepare your own dataset and store the raw data in `data/raw_asset/raw_data.pkl`. It should be a dataset representing daily or monthly asset prices. The dataset must include the following columns:
+- `DATE`: the timestamp of each record
+- `permno`: the unique identifier for each asset
+- `exret_rf`: the excess return (risk free) as the target
+- Additional feature columns
+
+### Data Processing
+Once the raw data is prepared, you can process it using following scripts to construct the graph representation and generate necessary files for model training:
+```
+python preprocess.py
+python build_graph.py
+```
+
+### Generated Data Files
 
 - **graph.pkl**: A list of tensors representing the adjacency matrix of graph at each time step. Each matrix has a shape of `(N, N)`, where `N` is the total number of nodes/assets. The element of the matrix is the pearson correlation of excess return between two assets, calculated over past 36 months for monthly data or 61 trading days for daily data.
   - If the node does not exist in a particular time step, all its connections are set to `0`.
